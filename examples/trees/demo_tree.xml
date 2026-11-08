@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Tree for the demo server, using aliases from the generated nodes.yaml.
+  No node IDs and no data types appear here: harvest put those in the YAML.
+
+      python examples/demo_server.py
+      bteng-opcua harvest -s examples/config/harvest.yaml -o examples/config/nodes.yaml
+      bteng-opcua run examples/trees/ -n examples/config/nodes.yaml
+-->
+<BTEng format_version="1.0" main_tree_to_execute="main">
+  <Tree ID="main">
+    <Sequence name="root">
+
+      <OpcUaConnect name="connect"
+                    endpoint="opc.tcp://127.0.0.1:4840/bteng/"
+                    session_id="demo"
+                    timeout="10.0" />
+
+      <!-- Guard: go no further unless the robot says it is ready. -->
+      <OpcUaCondition name="check_ready"
+                      session_id="demo"
+                      node_alias="robot_ready"
+                      expected_value="true" />
+
+      <!-- value="{current_temp}" remaps the output port onto a blackboard key. -->
+      <OpcUaRead name="read_temperature"
+                 session_id="demo"
+                 node_alias="temperature"
+                 value="{current_temp}" />
+
+      <OpcUaWrite name="write_setpoint"
+                  session_id="demo"
+                  node_alias="setpoint"
+                  value="42.5" />
+
+      <!-- Reads back what we just wrote, into a different blackboard key. -->
+      <OpcUaRead name="verify_setpoint"
+                 session_id="demo"
+                 node_alias="setpoint"
+                 value="{setpoint_readback}" />
+
+      <!-- Input args resolve from the blackboard by name: target_x, target_y, speed. -->
+      <OpcUaCallMethod name="move"
+                       session_id="demo"
+                       method_alias="move_to_position"
+                       output_prefix="move_" />
+
+      <OpcUaDisconnect name="disconnect"
+                       session_id="demo" />
+
+    </Sequence>
+  </Tree>
+
+  <!-- Required for value="{key}" to WRITE to the blackboard.  Without this
+       declaration the parser assumes every {key} attribute is an input port,
+       and OpcUaRead would silently fall back to storing under its alias. -->
+  <TreeNodesModel>
+    <Action ID="OpcUaRead">
+      <output_port name="value"/>
+    </Action>
+  </TreeNodesModel>
+</BTEng>

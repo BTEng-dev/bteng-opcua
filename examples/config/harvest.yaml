@@ -1,0 +1,19 @@
+# Input to `bteng-opcua harvest`.  This is the only file you write by hand:
+# name where the information model lives and which parts of it you want.
+#
+#     bteng-opcua harvest -s examples/config/harvest.yaml -o examples/config/nodes.yaml
+#
+# Everything else — namespace indices, data types, method argument names and
+# types — is read from the model and written into config/nodes.yaml.
+
+server: opc.tcp://127.0.0.1:4840/bteng/
+# nodeset: models/robot.NodeSet2.xml   # offline alternative; no server needed
+
+harvest:
+  # Take every Variable and Method under this object. Aliases default to the
+  # snake_cased BrowseName (Temperature -> temperature, MoveToPosition -> ...).
+  - "Objects/Robot"
+
+  # Or pick a single node, optionally naming the alias yourself:
+  # - node_id: "ns=2;i=1001"
+  #   alias: robot_ready

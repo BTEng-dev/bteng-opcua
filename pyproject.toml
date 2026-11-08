@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bteng_opcua"
+version = "0.2.2"
+description = "OPC UA integration for the BTEng Behavior Tree engine"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+dependencies = [
+    "bteng>=0.3.2",   # first release requiring Python 3.12; behaviour floor is 0.3.0
+    "asyncua>=1.0.0",
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+bteng-opcua = "bteng_opcua.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/BTEng-dev/bteng-opcua"
+Repository = "https://github.com/BTEng-dev/bteng-opcua"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+]
+dev = [
+    "bteng_opcua[test]",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bteng_opcua*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = [
+    "E501",   # line length handled separately
+    # UP042 fires only once target-version is py312: it wants
+    # OpcUaDataType(str, Enum) rewritten as enum.StrEnum. Deliberately not done.
+    # The class is public API (exported in __init__.__all__) and the two bases
+    # differ in str() and __format__, which types.py interpolates directly in
+    # its "No Python converter for OPC UA type '{data_type}'" messages.
+    # Converting is a behavioural change to a released type, not a lint fix.
+    "UP042",
+]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true  # asyncua and bteng stubs absent
+
+# StatefulActionNode guarantees on_start() runs (and sets self._future) before
+# on_running() is ever called, but that invariant lives in the base class and
+# mypy cannot see it — so every `self._future.done()` reads as Optional access.
+# The alternative is ~11 unreachable None-guards; suppress the narrow code here.
+[[tool.mypy.overrides]]
+module = "bteng_opcua.nodes.*"
+disable_error_code = ["union-attr"]
