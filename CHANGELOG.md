@@ -1,7 +1,12 @@
 # Changelog
 
 
-## [Unreleased]
+## [0.2.3] - 2026-11-08
+
+### Fixed
+- README now gives the PyPI install command and uses absolute links, so its links work on the PyPI project page. 0.2.2 on PyPI told readers the package was not on PyPI yet. No code changes.
+
+## [0.2.2] - 2026-11-08 (first PyPI upload)
 
 ### Changed
 - Require `bteng >= 0.3.2` (was `>= 0.3.0`) and Python >= 3.12. Nothing here needs
@@ -21,7 +26,7 @@
   (ruff UP017, surfaced by the target-version bump). Pure alias, no behaviour
   change.
 
-## [0.2.2] - 2026-07-28
+## [0.2.2] - 2026-07-28 (tagged, not published)
 
 ### Changed
 - Require `bteng >= 0.3.0` (was `>= 0.1.0`), in both `pyproject.toml` and the README.

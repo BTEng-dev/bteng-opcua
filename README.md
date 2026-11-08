@@ -21,10 +21,8 @@ All OPC UA nodes implement the `StatefulActionNode` protocol: they return `RUNNI
 
 ## Installation
 
-`bteng-opcua` is not on PyPI yet, so install it from GitHub:
-
 ```bash
-pip install git+https://github.com/BTEng-dev/bteng-opcua.git
+pip install bteng-opcua
 ```
 
 ## Quick start
@@ -91,7 +89,7 @@ Nodes resolve addresses through a registry alias (`node_alias`, recommended) or 
 
 ## Try it
 
-Run everything against the bundled demo server:
+From a clone of the [repository](https://github.com/BTEng-dev/bteng-opcua), run everything against the demo server:
 
 ```bash
 python examples/demo_server.py                                   # terminal 1
@@ -99,13 +97,13 @@ bteng-opcua harvest -s examples/config/harvest.yaml -o examples/config/nodes.yam
 bteng-opcua run examples/trees/ -n examples/config/nodes.yaml
 ```
 
-See [`examples/README.md`](examples/README.md) for the project layout.
+See [`examples/README.md`](https://github.com/BTEng-dev/bteng-opcua/blob/main/examples/README.md) for the project layout.
 
 ## Documentation
 
-- [Authoring guide](docs/authoring-nodes.md): full walkthrough from harvest spec to running tree
-- [Reference](docs/reference.md): harvest authentication, registry format, data types, sessions, and Python/XML integration
-- [Changelog](CHANGELOG.md)
+- [Authoring guide](https://github.com/BTEng-dev/bteng-opcua/blob/main/docs/authoring-nodes.md): full walkthrough from harvest spec to running tree
+- [Reference](https://github.com/BTEng-dev/bteng-opcua/blob/main/docs/reference.md): harvest authentication, registry format, data types, sessions, and Python/XML integration
+- [Changelog](https://github.com/BTEng-dev/bteng-opcua/blob/main/CHANGELOG.md)
 
 ## Development
 
@@ -118,4 +116,4 @@ pytest tests/
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://github.com/BTEng-dev/bteng-opcua/blob/main/LICENSE)
